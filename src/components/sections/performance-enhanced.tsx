@@ -1,0 +1,644 @@
+"use client"
+
+import { useRef, useState, useEffect } from 'react'
+
+import { motion, useScroll, useInView } from 'framer-motion'
+import {
+  Trophy,
+  Clock,
+  BarChart3,
+  PieChart,
+  Activity,
+  Rocket,
+  Cpu,
+  Monitor,
+  Database,
+  Shield,
+  Terminal
+} from 'lucide-react'
+
+// Animated Counter Component
+const AnimatedCounter = ({
+  value,
+  duration = 2,
+  suffix = '',
+  prefix = '',
+  decimal = false
+}: {
+  value: number
+  duration?: number
+  suffix?: string
+  prefix?: string
+  decimal?: boolean
+}) => {
+  const [count, setCount] = useState(0)
+  const [hasAnimated, setHasAnimated] = useState(false)
+  const ref = useRef<HTMLDivElement>(null)
+  const inView = useInView(ref, { once: true, margin: "-100px" })
+
+  useEffect(() => {
+    if (inView && !hasAnimated) {
+      setHasAnimated(true)
+      const increment = value / (duration * 60)
+      let current = 0
+
+      const timer = setInterval(() => {
+        current += increment
+        if (current >= value) {
+          setCount(value)
+          clearInterval(timer)
+        } else {
+          setCount(current)
+        }
+      }, 1000 / 60)
+
+      return () => clearInterval(timer)
+    }
+    return undefined
+  }, [inView, hasAnimated, value, duration])
+
+  return (
+    <span ref={ref}>
+      {prefix}{decimal ? count.toFixed(1) : Math.floor(count).toLocaleString()}{suffix}
+    </span>
+  )
+}
+
+// Progress Ring Component
+const ProgressRing = ({
+  value,
+  size = 120,
+  strokeWidth = 8,
+  color = '#FF2B2B'
+}: {
+  value: number
+  size?: number
+  strokeWidth?: number
+  color?: string
+}) => {
+  const [progress, setProgress] = useState(0)
+  const ref = useRef<SVGSVGElement>(null)
+  const inView = useInView(ref, { once: true, margin: "-100px" })
+
+  const radius = (size - strokeWidth) / 2
+  const circumference = radius * 2 * Math.PI
+  const strokeDashoffset = circumference - (progress / 100) * circumference
+
+  useEffect(() => {
+    if (inView) {
+      const timer = setTimeout(() => {
+        setProgress(value)
+      }, 200)
+      return () => clearTimeout(timer)
+    }
+    return undefined
+  }, [inView, value])
+
+  return (
+    <div className="relative inline-flex items-center justify-center">
+      <svg
+        ref={ref}
+        width={size}
+        height={size}
+        className="transform -rotate-90"
+      >
+        <circle
+          cx={size / 2}
+          cy={size / 2}
+          r={radius}
+          stroke="currentColor"
+          strokeWidth={strokeWidth}
+          fill="none"
+          className="text-gray-800"
+        />
+        <motion.circle
+          cx={size / 2}
+          cy={size / 2}
+          r={radius}
+          stroke={color}
+          strokeWidth={strokeWidth}
+          fill="none"
+          strokeDasharray={circumference}
+          initial={{ strokeDashoffset: circumference }}
+          animate={{ strokeDashoffset }}
+          transition={{ duration: 1.5, ease: "easeInOut" }}
+          strokeLinecap="round"
+        />
+      </svg>
+      <div className="absolute text-center">
+        <span className="text-2xl font-bold text-white">
+          <AnimatedCounter value={value} suffix="%" />
+        </span>
+      </div>
+    </div>
+  )
+}
+
+// Skill Bar Component
+const SkillBar = ({
+  skill,
+  level,
+  index
+}: {
+  skill: string
+  level: number
+  index: number
+}) => {
+  const ref = useRef<HTMLDivElement>(null)
+  const inView = useInView(ref, { once: true, margin: "-100px" })
+
+  const getColor = (level: number) => {
+    if (level >= 90) return 'from-emerald-500 to-green-600'
+    if (level >= 80) return 'from-ferrari-red to-pink-500'
+    if (level >= 70) return 'from-blue-500 to-cyan-500'
+    return 'from-yellow-500 to-orange-500'
+  }
+
+  return (
+    <motion.div
+      ref={ref}
+      className="space-y-2"
+      initial={{ opacity: 0, x: -50 }}
+      whileInView={{ opacity: 1, x: 0 }}
+      viewport={{ once: true }}
+      transition={{ delay: index * 0.1 }}
+    >
+      <div className="flex justify-between items-center">
+        <span className="text-gray-300 font-medium">{skill}</span>
+        <span className="text-ferrari-red font-bold">{level}%</span>
+      </div>
+      <div className="relative h-3 bg-gray-800 rounded-full overflow-hidden">
+        <motion.div
+          className={`absolute inset-y-0 left-0 bg-gradient-to-r ${getColor(level)} rounded-full`}
+          initial={{ width: 0 }}
+          animate={{ width: inView ? `${level}%` : 0 }}
+          transition={{ duration: 1, delay: 0.2, ease: "easeOut" }}
+        >
+          <motion.div
+            className="absolute inset-0 bg-white/20 animate-pulse"
+            initial={{ x: '-100%' }}
+            animate={{ x: '100%' }}
+            transition={{ duration: 2, repeat: Infinity, ease: "linear", repeatDelay: 1 }}
+          />
+        </motion.div>
+      </div>
+    </motion.div>
+  )
+}
+
+// Floating Badge Component
+const FloatingBadge = ({
+  icon: Icon,
+  value,
+  label,
+  delay,
+  color = 'ferrari-red'
+}: {
+  icon: any
+  value: string
+  label: string
+  delay: number
+  color?: string
+}) => {
+  const ref = useRef<HTMLDivElement>(null)
+  const inView = useInView(ref, { once: true })
+
+  return (
+    <motion.div
+      ref={ref}
+      className="glass p-6 rounded-2xl text-center group cursor-pointer"
+      initial={{ opacity: 0, scale: 0.8, rotateY: 180 }}
+      whileInView={{ opacity: 1, scale: 1, rotateY: 0 }}
+      viewport={{ once: true }}
+      transition={{ delay, type: "spring", stiffness: 200 }}
+      whileHover={{
+        y: -10,
+        scale: 1.05,
+        rotateZ: [0, -2, 2, 0],
+        transition: { duration: 0.3 }
+      }}
+    >
+      <motion.div
+        className={`w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-${color}/20 to-${color}/40 rounded-2xl flex items-center justify-center text-${color} group-hover:scale-110 transition-transform`}
+      >
+        <Icon size={32} />
+      </motion.div>
+      <motion.div
+        className="text-3xl font-bold text-white mb-1"
+        animate={inView ? { scale: [1, 1.2, 1] } : {}}
+        transition={{ delay: delay + 0.5, duration: 0.5 }}
+      >
+        {value}
+      </motion.div>
+      <div className="text-gray-400 text-sm">{label}</div>
+    </motion.div>
+  )
+}
+
+// Tech Stack Icon Component
+const TechStackIcon = ({
+  icon: Icon,
+  name,
+  color
+}: {
+  icon: React.ComponentType<{ size?: number; className?: string }>
+  name: string
+  color: string
+}) => {
+  const ref = useRef<HTMLDivElement>(null)
+  const inView = useInView(ref, { once: true, margin: "-50px" })
+
+  return (
+    <motion.div
+      ref={ref}
+      className="relative group"
+      initial={{ opacity: 0, scale: 0 }}
+      animate={inView ? { opacity: 1, scale: 1 } : {}}
+      transition={{ type: "spring", stiffness: 200 }}
+      whileHover={{ y: -5, rotateZ: 5 }}
+    >
+      <div className="glass p-4 rounded-xl">
+        <Icon size={40} className={color} />
+      </div>
+      <motion.div
+        className="absolute -bottom-6 left-1/2 transform -translate-x-1/2 bg-ferrari-gray px-2 py-1 rounded text-xs text-white opacity-0 group-hover:opacity-100 transition-opacity"
+        initial={{ y: 10 }}
+        whileHover={{ y: 0 }}
+      >
+        {name}
+      </motion.div>
+    </motion.div>
+  )
+}
+
+export function Performance() {
+  const containerRef = useRef<HTMLDivElement>(null)
+  useScroll({
+    target: containerRef,
+    offset: ['start end', 'end start']
+  })
+
+  
+  // const y = useTransform(scrollYProgress, [0, 1], [0, -50])
+  // const opacity = useTransform(scrollYProgress, [0, 0.5, 1], [0, 1, 0])
+
+  const skills = [
+    { skill: 'React / Next.js', level: 95 },
+    { skill: 'Laravel / PHP', level: 90 },
+    { skill: 'TypeScript', level: 85 },
+    { skill: 'Node.js', level: 80 },
+    { skill: 'Database Design', level: 85 },
+    { skill: 'DevOps / AWS', level: 75 },
+  ]
+
+  const achievements = [
+    { icon: Trophy, value: '13+', label: 'Projects Delivered', delay: 0 },
+    // { icon: Users, value: '5M+', label: 'End Users Impacted', delay: 0.1 },
+    { icon: Trophy, value: '11+', label: 'Web Systems', delay: 0.2 },
+    { icon: Clock, value: '3+', label: 'Years Experience', delay: 0.3 },
+  ]
+
+  const techStack = [
+    { icon: Monitor, name: 'Frontend', color: 'text-blue-500' },
+    { icon: Cpu, name: 'Backend', color: 'text-green-500' },
+    { icon: Database, name: 'Database', color: 'text-purple-500' },
+    { icon: Shield, name: 'Security', color: 'text-red-500' },
+    { icon: Terminal, name: 'DevOps', color: 'text-cyan-500' },
+  ]
+
+  const performanceMetrics = [
+    { label: 'Code Quality', value: 95 },
+    { label: 'Performance', value: 92 },
+    { label: 'Security', value: 88 },
+    { label: 'Best Practices', value: 90 },
+  ]
+
+  return (
+    <section ref={containerRef} id="performance" className="py-24 min-h-screen relative">
+      {/* Animated Background */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <motion.div
+          className="absolute top-20 left-10 w-64 h-64 bg-ferrari-red/5 rounded-full blur-3xl"
+          animate={{ x: [0, 100, 0], y: [0, -100, 0], scale: [1, 1.2, 1] }}
+          transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
+        />
+        <motion.div
+          className="absolute bottom-20 right-10 w-96 h-96 bg-purple-500/5 rounded-full blur-3xl"
+          animate={{ x: [0, -100, 0], y: [0, 100, 0], scale: [1.2, 1, 1.2] }}
+          transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
+        />
+      </div>
+
+      <div className="container mx-auto px-6 relative z-10">
+        {/* Section Header */}
+        <motion.div
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8 }}
+          className="text-center mb-16"
+        >
+          <motion.div
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass mb-6"
+            initial={{ opacity: 0, scale: 0 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            whileHover={{ scale: 1.05 }}
+          >
+            <Activity className="w-4 h-4 text-ferrari-red" />
+            <span className="text-sm text-gray-300">Performance Metrics</span>
+          </motion.div>
+
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6">
+            Skills & <span className="text-ferrari-red">Achievements</span>
+          </h2>
+
+          <motion.p
+            className="text-xl text-gray-400 max-w-3xl mx-auto"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2 }}
+          >
+            Combining technical expertise with creative problem-solving to deliver exceptional results.
+          </motion.p>
+        </motion.div>
+
+        {/* Achievement Badges */}
+        <motion.div
+          className="flex flex-wrap justify-center gap-6 mb-16 max-w-2xl mx-auto"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+        >
+          {achievements.map((achievement, index) => (
+            <div key={index} className="flex-1 min-w-[150px] max-w-[200px]">
+              <FloatingBadge {...achievement} />
+            </div>
+          ))}
+        </motion.div>
+
+        {/* Skills Progress Section */}
+        <div className="grid md:grid-cols-2 gap-12 mb-16">
+          <motion.div
+            initial={{ opacity: 0, x: -50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+          >
+            <h3 className="text-2xl font-bold text-white mb-8 flex items-center gap-3">
+              <BarChart3 className="text-ferrari-red" />
+              Technical Skills
+            </h3>
+            <div className="space-y-6">
+              {skills.map((skill, index) => (
+                <SkillBar key={skill.skill} {...skill} index={index} />
+              ))}
+            </div>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, x: 50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+          >
+            <h3 className="text-2xl font-bold text-white mb-8 flex items-center gap-3">
+              <PieChart className="text-ferrari-red" />
+              Performance Metrics
+            </h3>
+            <div className="grid grid-cols-2 gap-8">
+              {performanceMetrics.map((metric, index) => (
+                <motion.div
+                  key={metric.label}
+                  className="text-center"
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.1 }}
+                >
+                  <ProgressRing value={metric.value} size={100} strokeWidth={6} />
+                  <div className="mt-4 text-gray-300 font-medium">{metric.label}</div>
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
+        </div>
+
+        {/* Tech Stack Icons */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+        >
+          <h3 className="text-2xl font-bold text-white mb-8 text-center flex items-center justify-center gap-3">
+            <Rocket className="text-ferrari-red" />
+            Technology Expertise
+          </h3>
+          <div className="flex flex-wrap justify-center gap-8 mb-12">
+            {techStack.map((tech) => (
+              <div key={tech.name} className="flex-shrink-0">
+                <TechStackIcon {...tech} />
+              </div>
+            ))}
+          </div>
+
+        </motion.div>
+
+        {/* Trapezoid Slogan Banner */}
+        <motion.div
+          className="relative mb-16"
+          initial={{ x: "100%", opacity: 0 }}
+          whileInView={{
+            x: 0,
+            opacity: 1,
+          }}
+          viewport={{ once: true }}
+          transition={{
+            duration: 1,
+            delay: 0.6,
+            type: "spring"
+          }}
+          whileHover={{
+            x: [-2, 2, -1, 1, 0],
+            transition: { duration: 0.3 }
+          }}
+        >
+          {/* Trapezoid Background with shake */}
+          <motion.div
+            className="relative h-32 md:h-40 lg:h-48 overflow-hidden"
+            initial={false}
+            whileInView={{
+              x: [0, -5, 5, -3, 3, 0],
+              transition: {
+                duration: 0.5,
+                delay: 0.7,
+                type: "tween",
+                ease: "easeInOut"
+              }
+            }}
+            viewport={{ once: true }}
+          >
+            <div
+              className="absolute inset-0 bg-gradient-to-r from-ferrari-red/90 to-ferrari-red/70 backdrop-blur-sm"
+              style={{
+                clipPath: 'polygon(20% 0, 100% 0, 100% 100%, 0% 100%)'
+              }}
+            >
+              {/* Animated pattern overlay */}
+              <div className="absolute inset-0 opacity-10">
+                {[...Array(30)].map((_, i) => {
+                  // Deterministic pseudo-random values based on index
+                  const seed = i * 9.9 + 7.3
+                  const top = ((seed * 31) % 100)
+                  const left = ((seed * 47) % 100)
+                  const duration = 3 + ((seed * 13) % 2)
+
+                  return (
+                    <div
+                      key={i}
+                      className="absolute w-1 h-1 bg-white rounded-full"
+                      style={{
+                        top: `${top}%`,
+                        left: `${left}%`,
+                        animation: `float ${duration}s ease-in-out infinite`
+                      }}
+                    />
+                  )
+                })}
+              </div>
+            </div>
+
+            {/* Slogan Text */}
+            <div className="relative h-full flex items-center pl-8 md:pl-16 lg:pl-24">
+              {/* Boom Particles */}
+              <motion.div
+                className="absolute inset-0 pointer-events-none"
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.9 }}
+              >
+                {[...Array(20)].map((_, i) => {
+                  const angle = (i / 20) * Math.PI * 2
+                  const distance = 100 + Math.random() * 150
+
+                  return (
+                    <motion.div
+                      key={i}
+                      className="absolute w-2 h-2 bg-yellow-400 rounded-full"
+                      style={{
+                        left: '50%',
+                        top: '50%',
+                      }}
+                      initial={{
+                        scale: 0,
+                        x: 0,
+                        y: 0,
+                        opacity: 1
+                      }}
+                      whileInView={{
+                        scale: [0, 1.5, 0],
+                        x: Math.cos(angle) * distance,
+                        y: Math.sin(angle) * distance,
+                        opacity: [1, 1, 0],
+                      }}
+                      viewport={{ once: true }}
+                      transition={{
+                        duration: 0.8,
+                        delay: 0.9 + Math.random() * 0.2,
+                        ease: "easeOut"
+                      }}
+                    />
+                  )
+                })}
+              </motion.div>
+
+              <motion.div
+                className="text-white"
+                initial={{ opacity: 0, scale: 0.3, rotate: -15, x: -50 }}
+                whileInView={{
+                  opacity: 1,
+                  scale: 1,
+                  rotate: 0,
+                  x: 0
+                }}
+                viewport={{ once: true }}
+                transition={{
+                  delay: 0.8,
+                  duration: 0.6,
+                  type: "spring",
+                  stiffness: 300,
+                  damping: 10
+                }}
+              >
+                <div className="text-2xl md:text-4xl lg:text-5xl xl:text-6xl font-black flex items-center gap-3 md:gap-4">
+                  <span className="inline-block">CODING</span>
+                  <span className="inline-block">PARTNER:</span>
+                  <span className="inline-block text-white/90">YOU</span>
+                  <span className="inline-block text-3xl md:text-5xl lg:text-6xl text-yellow-300">+</span>
+                  <span className="inline-block text-yellow-300">AI</span>
+                </div>
+
+                {/* Multiple Shockwaves */}
+                {[...Array(3)].map((_, i) => (
+                  <motion.div
+                    key={i}
+                    className="absolute inset-0 border-4 border-yellow-400/30 rounded-full"
+                    initial={{ scale: 0.5, opacity: 0 }}
+                    whileInView={{
+                      scale: [0.5, 2.5 + i * 0.5, 3 + i * 0.5],
+                      opacity: [0, 0.5, 0],
+                    }}
+                    viewport={{ once: true }}
+                    transition={{
+                      duration: 1,
+                      delay: 0.85 + i * 0.1,
+                      ease: "easeOut"
+                    }}
+                    style={{
+                      left: '30%',
+                      top: '50%',
+                      transform: 'translate(-50%, -50%)',
+                      width: `${150 + i * 50}%`,
+                      height: `${200 + i * 50}%`,
+                    }}
+                  />
+                ))}
+
+                {/* Flash effect */}
+                <motion.div
+                  className="absolute inset-0 bg-yellow-400/20"
+                  initial={{ opacity: 0 }}
+                  whileInView={{
+                    opacity: [0, 1, 0],
+                  }}
+                  viewport={{ once: true }}
+                  transition={{
+                    duration: 0.2,
+                    delay: 0.85,
+                    ease: "easeOut"
+                  }}
+                />
+              </motion.div>
+            </div>
+
+            {/* Decorative elements */}
+            <motion.div
+              className="absolute top-4 right-8 w-16 h-16 border-2 border-white/20 rounded-full"
+              animate={{ rotate: 360 }}
+              transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+            />
+            <motion.div
+              className="absolute bottom-4 right-24 w-8 h-8 border-2 border-white/20 rounded-full"
+              animate={{ rotate: -360 }}
+              transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
+            />
+          </motion.div>
+        </motion.div>
+      </div>
+    </section>
+  )
+}

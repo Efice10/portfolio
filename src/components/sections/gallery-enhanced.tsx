@@ -1,0 +1,603 @@
+"use client"
+
+import { useState, useRef } from 'react'
+
+import { motion, useScroll, useTransform, AnimatePresence, useInView } from 'framer-motion'
+import { ExternalLink, X, ChevronDown, Star, GitBranch, Zap } from 'lucide-react'
+
+// Helper function to wrap values (from popmotion)
+/*
+function wrap(min: number, max: number, v: number): number {
+  const rangeSize = max - min
+  return ((((v - min) % rangeSize) + rangeSize) % rangeSize) + min
+}
+*/
+
+const projects = [
+  {
+    id: 1,
+    title: 'PropKira - Property Management',
+    category: 'Full Stack',
+    description: 'Cloud-based property and accounting management platform with automated billing and financial reports',
+    tech: ['Laravel', 'React', 'MySQL', 'RESTful APIs'],
+    image: '/api/placeholder/800/600',
+    live: 'https://app.propkira.com',
+    featured: true,
+    gradient: 'from-purple-600 to-pink-600'
+  },
+  {
+    id: 2,
+    title: 'PropKita Property System',
+    category: 'Full Stack',
+    description: 'Property management system with SSO integration and bi-directional data sync with PropKira',
+    tech: ['Laravel', 'Vue 2', 'MySQL', 'SSO Integration'],
+    image: '/api/placeholder/800/600',
+        live: 'https://app.propkita.com',
+    featured: true,
+    gradient: 'from-blue-600 to-cyan-600'
+  },
+  {
+    id: 3,
+    title: 'ForceHero - PDRM Security System',
+    category: 'Full Stack',
+    description: 'Security guard recruitment and management system for PDRM with multi-level approval workflows',
+    tech: ['Laravel', 'Next.js', 'MySQL', 'Role-Based Access'],
+    image: '/api/placeholder/800/600',
+        live: 'https://app.forcehero.com',
+    featured: true,
+    gradient: 'from-red-600 to-orange-600'
+  },
+  {
+    id: 4,
+    title: 'MBPJ AI Chatbot',
+    category: 'Backend',
+    description: 'Backend API for chatbot with analytics dashboard, SSO integration, and high-volume query handling',
+    tech: ['Laravel', 'REST APIs', 'Oracle DB', 'Queue System'],
+    image: '/api/placeholder/800/600',
+    live: 'https://chatbot.mbpj.gov.my',
+    featured: true,
+    gradient: 'from-indigo-600 to-purple-600'
+  },
+  {
+    id: 5,
+    title: 'E-Rupabumi Asset Management',
+    category: 'Full Stack',
+    description: 'Web system for managing MBPJ trees, park equipment, and city assets with mobile API support',
+    tech: ['Laravel', 'JavaScript', 'jQuery', 'MySQL'],
+    image: '/api/placeholder/800/600',
+    live: 'https://erupabumi.mbpj.gov.my',
+    featured: true,
+    gradient: 'from-emerald-600 to-teal-600'
+  },
+  {
+    id: 6,
+    title: 'eStrategic Planning System',
+    category: 'Full Stack',
+    description: 'Dashboard for MBPJ annual programs with Vue.js frontend and role-based access control',
+    tech: ['Laravel', 'Nuxt 3', 'Oracle DB', 'SSO Integration'],
+    image: '/api/placeholder/800/600',
+    live: 'https://pj-estrategic.mbpj.gov.my',
+    featured: true,
+    gradient: 'from-violet-600 to-pink-600'
+  },
+  {
+    id: 7,
+    title: 'MesraHR HR System',
+    category: 'Full Stack',
+    description: 'Built core features for training, KPI/metrics, and multi-level approval with Bahasa/English/Indonesia translations',
+    tech: ['Laravel', 'Vue 2', 'Vuetify', 'Multi-language', 'RESTful APIs'],
+    image: '/api/placeholder/800/600',
+    live: 'https://app.mesrahr.com',
+    featured: true,
+    gradient: 'from-violet-600 to-purple-600'
+  },
+  {
+    id: 8,
+    title: 'E-Tempahan Booking System',
+    category: 'Full Stack',
+    description: 'Online booking platform for MPKlang facilities including halls and sports courts',
+    tech: ['PHP', 'SQL', 'HTML', 'CSS'],
+    image: '/api/placeholder/800/600',
+    live: 'https://etempahan.mpklang.gov.my',
+    featured: false,
+    gradient: 'from-cyan-600 to-blue-600'
+  },
+  {
+    id: 9,
+    title: 'E-Lesen Fleet Registration',
+    category: 'Full Stack',
+    description: 'Fleet registration module with multi-level application and approval workflows',
+    tech: ['Laravel', 'MySQL', 'Workflows'],
+    image: '/api/placeholder/800/600',
+    live: 'https://elesen.dof.gov.my',
+    featured: false,
+    gradient: 'from-teal-600 to-green-600'
+  },
+  {
+    id: 10,
+    title: 'Digital Dagang CRM',
+    category: 'Full Stack',
+    description: 'Complete CRM system developed from scratch for customer data and sales lead management',
+    tech: ['Laravel', 'Angular', 'MySQL', 'PHP'],
+    image: '/api/placeholder/800/600',
+    live: '#',
+    featured: false,
+    gradient: 'from-green-600 to-emerald-600'
+  },
+  {
+    id: 11,
+    title: 'E-Commerce Mobile App',
+    category: 'Mobile',
+    description: 'E-Commerce application for In-Tech 2021 competition using Construct 3 and Firebase',
+    tech: ['Construct 3', 'Firebase', 'Airtable', 'Bravo Studio'],
+    image: '/api/placeholder/800/600',
+    live: '#',
+    featured: false,
+    gradient: 'from-purple-600 to-indigo-600'
+  },
+    {
+    id: 14,
+    title: 'IJSPS Journal System',
+    category: 'DevOps',
+    description: 'Deployed Ubuntu Server VM with XFCE for lightweight GUI experience',
+    tech: ['Ubuntu Server', 'XFCE', 'System Admin'],
+    image: '/api/placeholder/800/600',
+    live: 'https://www.ism.gov.my',
+    featured: false,
+    gradient: 'from-orange-600 to-red-600'
+  }
+]
+
+const categories = ['All', 'Full Stack', 'Frontend', 'Backend', 'Mobile', 'DevOps']
+
+// Gradient Border Card Component
+const GradientBorderCard = ({ children, className = "" }: { children: React.ReactNode; className?: string }) => {
+  return (
+    <div className={`relative ${className}`}>
+      <div className="absolute inset-0 bg-gradient-to-r from-ferrari-red via-pink-500 to-purple-500 rounded-2xl blur opacity-50 group-hover:opacity-75 transition-opacity" />
+      <div className="relative bg-ferrari-gray rounded-2xl p-0.5">
+        {children}
+      </div>
+    </div>
+  )
+}
+
+// Interactive Project Card with 3D Flip
+const ProjectCard3D = ({ project, index, onClick }: { project: any; index: number; onClick: () => void }) => {
+  const [isHovered, setIsHovered] = useState(false)
+  const [rotateX, setRotateX] = useState(0)
+  const [rotateY, setRotateY] = useState(0)
+  const cardRef = useRef<HTMLDivElement>(null)
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!cardRef.current) return
+    const rect = cardRef.current.getBoundingClientRect()
+    const x = e.clientX - rect.left
+    const y = e.clientY - rect.top
+    const centerX = rect.width / 2
+    const centerY = rect.height / 2
+    const rotateXValue = (y - centerY) / 15
+    const rotateYValue = (centerX - x) / 15
+    setRotateX(rotateXValue)
+    setRotateY(rotateYValue)
+  }
+
+  const handleMouseLeave = () => {
+    setRotateX(0)
+    setRotateY(0)
+    setIsHovered(false)
+  }
+
+  return (
+    <motion.div
+      ref={cardRef}
+      initial={{ opacity: 0, y: 50, rotateX: 15 }}
+      whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
+      transition={{ duration: 0.6, delay: index * 0.1 }}
+      viewport={{ once: true, margin: "-100px" }}
+      onMouseMove={handleMouseMove}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={handleMouseLeave}
+      style={{
+        transform: `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(${isHovered ? 20 : 0}px)`,
+      }}
+      className="group cursor-pointer"
+      onClick={onClick}
+    >
+      <GradientBorderCard>
+        <motion.div
+          className="relative overflow-hidden bg-ferrari-gray rounded-2xl p-6 h-full"
+          whileHover={{ scale: 1.02 }}
+          transition={{ duration: 0.3 }}
+        >
+          {/* Animated Background Pattern */}
+          <motion.div
+            className="absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity"
+            style={{
+              backgroundImage: `url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23FF2B2B' fill-opacity='0.4'%3E%3Cpath d='M0 40L40 0H20L0 20M40 40V20L20 40'/%3E%3C/g%3E%3C/svg%3E")`,
+            }}
+            animate={{ x: [0, 40, 0], y: [0, 40, 0] }}
+            transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
+          />
+
+          {/* Floating Icons */}
+          {isHovered && (
+            <motion.div className="absolute top-4 right-4 flex gap-2">
+              <motion.a
+                href={project.live}
+                className="w-8 h-8 bg-black/50 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-ferrari-red transition-colors"
+                whileHover={{ scale: 1.2 }}
+                whileTap={{ scale: 0.9 }}
+                transition={{ duration: 0.3 }}
+                onClick={(e) => e.stopPropagation()}
+              >
+                <ExternalLink size={16} />
+              </motion.a>
+            </motion.div>
+          )}
+
+          {/* Project Image with Gradient Overlay */}
+          <div className="relative mb-6 overflow-hidden rounded-xl h-48">
+            <div className={`absolute inset-0 bg-gradient-to-br ${project.gradient} opacity-80`} />
+            <motion.div
+              className="absolute inset-0 flex items-center justify-center"
+              initial={{ scale: 1, opacity: 0.5 }}
+              whileHover={{ scale: 1.1, opacity: 1 }}
+              transition={{ duration: 0.5 }}
+            >
+              <Zap className="w-16 h-16 text-white" />
+            </motion.div>
+            <motion.div
+              className="absolute inset-0 bg-black/20"
+              animate={{ opacity: isHovered ? 0.3 : 0 }}
+              transition={{ duration: 0.3 }}
+            />
+          </div>
+
+          {/* Content */}
+          <div className="relative z-10">
+            <motion.div
+              className="flex items-center justify-between mb-3"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.2 }}
+            >
+              <span className={`px-3 py-1 rounded-full text-xs font-semibold bg-gradient-to-r ${project.gradient} text-white`}>
+                {project.category}
+              </span>
+              {project.featured && (
+                <motion.div
+                  className="flex items-center gap-1 text-ferrari-red"
+                  animate={{ rotate: isHovered ? 360 : 0 }}
+                  transition={{ duration: 0.6 }}
+                >
+                  <Star size={16} className="fill-current" />
+                  <span className="text-xs">Featured</span>
+                </motion.div>
+              )}
+            </motion.div>
+
+            <h3 className="text-xl font-bold text-white mb-3 group-hover:text-ferrari-red transition-colors">
+              {project.title}
+            </h3>
+
+            <p className="text-gray-400 text-sm mb-4 line-clamp-2">
+              {project.description}
+            </p>
+
+            {/* Tech Stack */}
+            <div className="flex flex-wrap gap-2 mb-4">
+              {project.tech.slice(0, 3).map((tech: string, i: number) => (
+                <motion.span
+                  key={tech}
+                  className="px-2 py-1 bg-black/30 text-gray-300 text-xs rounded-md"
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.1 * i }}
+                >
+                  {tech}
+                </motion.span>
+              ))}
+              {project.tech.length > 3 && (
+                <span className="px-2 py-1 bg-ferrari-red/10 text-ferrari-red text-xs rounded-md">
+                  +{project.tech.length - 3}
+                </span>
+              )}
+            </div>
+
+            {/* Stats */}
+            {project.stats && (
+              <motion.div
+                className="flex items-center justify-between pt-4 border-t border-gray-800"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3 }}
+              >
+                {Object.entries(project.stats).map(([key, value], _i) => (
+                  <div key={key} className="text-center">
+                    <div className="text-lg font-bold text-white">{String(value)}</div>
+                    <div className="text-xs text-gray-500 capitalize">{key}</div>
+                  </div>
+                ))}
+              </motion.div>
+            )}
+          </div>
+
+          {/* Hover Effect Overlay */}
+          <motion.div
+            className="absolute inset-0 rounded-2xl"
+            initial={{ opacity: 0 }}
+            whileHover={{ opacity: 1 }}
+            transition={{ duration: 0.3 }}
+            style={{
+              background: `radial-gradient(circle at ${(isHovered ? '50%' : '0%')} 50%, rgba(255, 43, 43, 0.1) 0%, transparent 70%)`,
+            }}
+          />
+        </motion.div>
+      </GradientBorderCard>
+    </motion.div>
+  )
+}
+
+
+export function Gallery() {
+  const [selectedCategory, setSelectedCategory] = useState('All')
+  const [selectedProject, setSelectedProject] = useState<any>(null)
+  const [, _setDirection] = useState(0)
+  const [showAllProjects, setShowAllProjects] = useState(false)
+  const containerRef = useRef<HTMLDivElement>(null)
+
+  useInView(containerRef, { once: false, margin: "-100px" })
+
+  // Use scroll with null target initially to avoid hydration issues
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ['start end', 'end start']
+  })
+  const y = useTransform(scrollYProgress, [0, 1], [0, -50])
+
+  const filteredProjects = selectedCategory === 'All'
+    ? projects
+    : projects.filter(p => p.category === selectedCategory)
+
+  const displayProjects = showAllProjects ? filteredProjects : filteredProjects.slice(0, 6)
+  const hasMoreProjects = filteredProjects.length > 6
+
+  // const projectIndex = selectedProject
+  //   ? filteredProjects.findIndex(p => p.id === selectedProject.id)
+  //   : 0
+
+  /*
+  const paginate = (newDirection: number) => {
+    if (selectedProject) {
+      const newIndex = wrap(0, filteredProjects.length, projectIndex + newDirection)
+      setSelectedProject(filteredProjects[newIndex])
+      setDirection(newDirection)
+    }
+  }
+*/
+
+  return (
+    <section ref={containerRef} id="gallery" className="py-24 min-h-screen relative">
+      {/* Background Elements */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <motion.div
+          className="absolute -top-40 -right-40 w-80 h-80 bg-ferrari-red/10 rounded-full blur-3xl"
+          animate={{ x: [0, 100, 0], y: [0, -100, 0] }}
+          transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
+        />
+        <motion.div
+          className="absolute -bottom-40 -left-40 w-80 h-80 bg-purple-500/10 rounded-full blur-3xl"
+          animate={{ x: [0, -100, 0], y: [0, 100, 0] }}
+          transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
+        />
+      </div>
+
+      <div className="container mx-auto px-6 relative z-10">
+        {/* Section Header */}
+        <motion.div
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          viewport={{ once: true }}
+          className="text-center mb-16"
+        >
+          <motion.div
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass mb-6"
+            initial={{ opacity: 0, scale: 0 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            whileHover={{ scale: 1.05 }}
+          >
+            <GitBranch size={16} className="text-ferrari-red" />
+            <span className="text-sm text-gray-300">Featured Projects</span>
+          </motion.div>
+
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6">
+            <span className="bg-gradient-to-r from-white via-ferrari-red to-pink-500 bg-clip-text text-transparent">
+              Project Gallery
+            </span>
+          </h2>
+
+          <motion.p
+            className="text-xl text-gray-400 max-w-3xl mx-auto"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2 }}
+          >
+            Explore my latest work - precision-engineered solutions that push boundaries and deliver exceptional results.
+          </motion.p>
+        </motion.div>
+
+        {/* Category Filter with Animated Underline */}
+        <motion.div
+          className="flex flex-wrap justify-center gap-4 mb-12 relative"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          viewport={{ once: true }}
+        >
+          {categories.map((category, index) => (
+            <motion.button
+              key={category}
+              onClick={() => setSelectedCategory(category)}
+              className={`relative px-6 py-3 rounded-xl font-medium transition-all ${
+                selectedCategory === category
+                  ? 'text-white'
+                  : 'text-gray-400 hover:text-white'
+              }`}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: index * 0.05 }}
+            >
+              {selectedCategory === category && (
+                <motion.div
+                  className="absolute inset-0 bg-gradient-to-r from-ferrari-red to-pink-500 rounded-xl -z-10"
+                  layoutId="activeCategory"
+                  transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                />
+              )}
+              <span className="relative z-10">{category}</span>
+            </motion.button>
+          ))}
+        </motion.div>
+
+        {/* Projects Grid with Staggered Animation */}
+        <motion.div
+          className="grid md:grid-cols-2 lg:grid-cols-3 gap-8"
+          style={{ y }}
+        >
+          {displayProjects.map((project, index) => (
+            <ProjectCard3D
+              key={project.id}
+              project={project}
+              index={index}
+              onClick={() => setSelectedProject(project)}
+            />
+          ))}
+        </motion.div>
+
+        {/* Show More Button with Animated Counter */}
+        {hasMoreProjects && (
+          <motion.div
+            className="text-center mt-12"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+          >
+            <motion.button
+              onClick={() => setShowAllProjects(!showAllProjects)}
+              className="group inline-flex items-center gap-3 px-8 py-4 glass border border-ferrari-red/30 text-ferrari-red font-semibold rounded-xl hover:bg-ferrari-red hover:text-white transition-all"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <motion.span
+                className="inline-flex items-center gap-2"
+                animate={{ rotate: showAllProjects ? 180 : 0 }}
+                transition={{ duration: 0.3 }}
+              >
+                {showAllProjects ? 'Show Less' : `Show More Projects`}
+              </motion.span>
+              <ChevronDown
+                size={20}
+                className={`transform transition-transform ${showAllProjects ? 'rotate-180' : ''}`}
+              />
+              {!showAllProjects && (
+                <motion.span
+                  className="px-2 py-1 bg-ferrari-red text-white text-xs rounded-full"
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ delay: 0.2 }}
+                >
+                  {filteredProjects.length - 6}
+                </motion.span>
+              )}
+            </motion.button>
+          </motion.div>
+        )}
+
+        {/* Project Modal */}
+        <AnimatePresence>
+          {selectedProject && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 z-50 bg-black/80 backdrop-blur-lg flex items-center justify-center p-6"
+              onClick={() => setSelectedProject(null)}
+            >
+              <motion.div
+                className="bg-gradient-to-br from-ferrari-gray to-black rounded-3xl max-w-5xl w-full max-h-[90vh] overflow-hidden shadow-2xl"
+                initial={{ scale: 0.8, rotateY: 45 }}
+                animate={{ scale: 1, rotateY: 0 }}
+                exit={{ scale: 0.8, rotateY: 45 }}
+                transition={{ type: "spring", damping: 25, stiffness: 200 }}
+                onClick={(e) => e.stopPropagation()}
+              >
+                {/* Header with Image */}
+                <div className="relative h-64 md:h-96">
+                  <div className={`absolute inset-0 bg-gradient-to-br ${selectedProject.gradient} opacity-90`} />
+                  <motion.div
+                    className="absolute inset-0 flex items-center justify-center"
+                    initial={{ scale: 0.8, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    transition={{ delay: 0.2 }}
+                  >
+                    <div className="text-center text-white">
+                      <h2 className="text-3xl md:text-4xl font-bold mb-2">{selectedProject.title}</h2>
+                      <p className="text-xl opacity-90">{selectedProject.category}</p>
+                    </div>
+                  </motion.div>
+
+                  {/* Close Button */}
+                  <motion.button
+                    onClick={() => setSelectedProject(null)}
+                    className="absolute top-6 right-6 w-10 h-10 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-white/20 transition-colors"
+                    whileHover={{ scale: 1.1, rotate: 90 }}
+                    whileTap={{ scale: 0.9 }}
+                  >
+                    <X size={20} />
+                  </motion.button>
+                </div>
+
+                {/* Content */}
+                <div className="p-8 md:p-12">
+                  <p className="text-gray-400 mb-6">{selectedProject.description}</p>
+
+                  <div className="flex flex-wrap gap-2 mb-6">
+                    {selectedProject.tech.map((tech: string) => (
+                      <span
+                        key={tech}
+                        className="px-4 py-2 bg-gradient-to-r from-ferrari-red/10 to-pink-500/10 text-ferrari-red rounded-lg font-medium"
+                      >
+                        {tech}
+                      </span>
+                    ))}
+                  </div>
+
+                  <motion.a
+                    href={selectedProject.live}
+                    className="w-full px-8 py-4 bg-gradient-to-r from-ferrari-red to-pink-500 text-white font-semibold rounded-xl text-center hover:shadow-lg hover:shadow-ferrari-red/25 transition-all"
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <span className="flex items-center justify-center gap-2">
+                      <ExternalLink size={20} />
+                      View Live Project
+                    </span>
+                  </motion.a>
+                </div>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+    </section>
+  )
+}
