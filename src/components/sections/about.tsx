@@ -3,8 +3,9 @@
 import { useRef } from 'react'
 
 import { motion, useInView } from 'framer-motion'
-import { Code, Database, Cpu, Globe, Sparkles } from 'lucide-react'
+import { Code, Database, Cpu, Globe, Sparkles, Briefcase, GraduationCap, Building2 } from 'lucide-react'
 
+import { ScrollTimeline, type TimelineItem } from '@/components/shared'
 import { TechStackSection } from '@/components/ui/tech-logos'
 
 const skills = [
@@ -15,30 +16,42 @@ const skills = [
   { name: 'Database & Storage', icon: Database, level: 88, description: 'MySQL, Oracle DB, Firebase, Redis, SQLite' },
 ]
 
-const timeline = [
+const careerTimeline: TimelineItem[] = [
   {
-    year: '2024 - Present',
+    id: '1',
+    date: '2024 - Present',
     title: 'Software Developer',
-    company: 'TrackerHero - Integrated Operations',
-    description: 'Designed, developed, and maintained web applications using Laravel, Nuxt, Next.js, and MySQL',
+    subtitle: 'TrackerHero - Integrated Operations',
+    description: 'Designed, developed, and maintained web applications using Laravel, Nuxt, Next.js, and MySQL. Building scalable solutions for real-time tracking and operations management.',
+    icon: Briefcase,
+    tags: ['Laravel', 'Next.js', 'MySQL', 'Nuxt'],
   },
   {
-    year: '2023 - 2024',
+    id: '2',
+    date: '2023 - 2024',
     title: 'Web App Developer',
-    company: 'Digital Dagang Sdn. Bhd. Malaysia',
-    description: 'Developed a complete CRM system using Laravel and Angular from scratch',
+    subtitle: 'Digital Dagang Sdn. Bhd. Malaysia',
+    description: 'Developed a complete CRM system using Laravel and Angular from scratch. Implemented full-stack features including user management, reporting, and data analytics.',
+    icon: Building2,
+    tags: ['Laravel', 'Angular', 'CRM', 'REST APIs'],
   },
   {
-    year: '2020 - 2024',
+    id: '3',
+    date: '2020 - 2024',
     title: 'Bachelor of Computer Science',
-    company: 'Universiti Malaysia Terengganu',
-    description: 'Bachelor of Computer Science (Mobile Computing) With Honours - GPA: 3.27',
+    subtitle: 'Universiti Malaysia Terengganu',
+    description: 'Bachelor of Computer Science (Mobile Computing) With Honours - GPA: 3.27. Focused on mobile app development, software engineering principles, and database management.',
+    icon: GraduationCap,
+    tags: ['Mobile Computing', 'Software Engineering', 'GPA 3.27'],
   },
   {
-    year: '2019 - 2020',
-    title: 'Matriculation',
-    company: 'Kedah Matriculation College',
-    description: 'Matriculation Certificate - GPA: 3.14',
+    id: '4',
+    date: '2019 - 2020',
+    title: 'Matriculation Certificate',
+    subtitle: 'Kedah Matriculation College',
+    description: 'Foundation program in physical science with GPA: 3.14. Built strong fundamentals in mathematics, physics, and programming.',
+    icon: GraduationCap,
+    tags: ['Foundation', 'Physical Science', 'GPA 3.14'],
   },
 ]
 
@@ -151,38 +164,19 @@ export function About() {
           <TechStackSection />
         </motion.div>
 
-        {/* Timeline */}
+        {/* Career Journey Timeline */}
         <motion.div
           className="mt-20"
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8, delay: 1 }}
         >
-          <h3 className="text-3xl font-bold text-white text-center mb-12">Career Journey</h3>
-          <div className="max-w-4xl mx-auto">
-            {timeline.map((item, index) => (
-              <motion.div
-                key={index}
-                className="flex items-center mb-8 group"
-                initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
-                animate={isInView ? { opacity: 1, x: 0 } : {}}
-                transition={{ duration: 0.5, delay: 1.2 + index * 0.1 }}
-              >
-                <div className="w-24 text-ferrari-red font-bold">{item.year}</div>
-                <div className="relative">
-                  <div className="w-4 h-4 bg-ferrari-red rounded-full group-hover:scale-150 transition-transform" />
-                  {index < timeline.length - 1 && (
-                    <div className="absolute top-4 left-2 w-0.5 h-16 bg-gray-700" />
-                  )}
-                </div>
-                <div className="flex-1 ml-8 glass p-6 rounded-lg group-hover:glow-red transition-all">
-                  <h4 className="text-xl font-semibold text-white mb-1">{item.title}</h4>
-                  <h5 className="text-ferrari-red mb-2">{item.company}</h5>
-                  <p className="text-gray-400">{item.description}</p>
-                </div>
-              </motion.div>
-            ))}
-          </div>
+          <ScrollTimeline
+            items={careerTimeline}
+            title="Career Journey"
+            description="My professional path through technology and education"
+            className="py-8"
+          />
         </motion.div>
       </div>
     </section>

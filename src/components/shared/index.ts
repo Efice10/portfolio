@@ -13,6 +13,8 @@ export { GlassCard, SimpleGlassCard } from './glass-card';
 export { LiveActivityTimeline } from './live-activity-timeline';
 export type { Activity, ActivityType } from './live-activity-timeline';
 export { NavBubbleContainer, NavBubbleItem } from './nav-bubble';
+export { ScrollTimeline } from './scroll-timeline';
+export type { TimelineItem } from './scroll-timeline';
 
 // Skeleton loading components
 export {

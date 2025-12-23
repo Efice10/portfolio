@@ -18,19 +18,6 @@ import {
   Zap,
 } from 'lucide-react';
 
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
-import { Separator } from '@/components/ui/separator';
-
-// Import client components
 import {
   AnimatedButton,
   AnimatedCard,
@@ -47,6 +34,19 @@ import {
   AnimatedSection,
   AnimatedSectionHeader,
 } from '@/components/sections/landing-client';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { Separator } from '@/components/ui/separator';
+
+// Import client components
 
 export default function Home() {
   return (
