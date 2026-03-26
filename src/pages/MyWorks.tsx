@@ -27,6 +27,17 @@ const MyWorks = () => {
               <p className="myworks-card-category">{project.category}</p>
               <p className="myworks-card-description">{project.description}</p>
               <p className="myworks-card-tech">{project.technologies}</p>
+              {project.link && (
+                <a
+                  href={project.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="myworks-card-link"
+                  data-cursor="disable"
+                >
+                  View Project →
+                </a>
+              )}
             </div>
           </div>
         ))}

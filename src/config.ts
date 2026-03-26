@@ -1,193 +1,151 @@
 export const config = {
     developer: {
-        name: "Redoyanul",
-        fullName: "Redoyanul Haque",
-        title: "AI & Full-Stack Developer",
-        description: "AI & Full-Stack Developer building intelligent systems and modern web applications. Passionate about machine learning, deep learning, and creating next-gen autonomous agents."
+        name: "Farid",
+        fullName: "Muhammad Farid Iqbal Bin Amran",
+        title: "Software Developer",
+        description: "Software Developer specializing in full-stack web development with Laravel, Nuxt, Next.js, and React. Experienced in building enterprise applications, CRM systems, and government solutions."
     },
     social: {
-        github: "red1-for-hek",
-        email: "redoyanul1234@gmail.com",
-        location: "Bangladesh"
+        github: "Efice10",
+        email: "muhdfarid109.mf@gmail.com",
+        location: "Cyberjaya, Selangor, Malaysia"
     },
     about: {
         title: "About Me",
-        description: "I am a self-taught AI & Full-Stack Developer from Bangladesh. I build intelligent systems, chatbots, and modern web applications. My expertise includes Machine Learning, Deep Learning, NLP, and Full-Stack Web Development with React, Node.js, and Python. Currently building next-gen AI Agents and JARVIS-like Personal Assistants. I have a competitive programming mindset and a deep passion for automation. Code is poetry, AI is the canvas."
+        description: "I'm a Software Developer based in Cyberjaya, Malaysia, with a passion for building web applications that make a difference. I specialize in full-stack development using Laravel, React, Vue.js, and Next.js.\n\nCurrently at TrackerHero, I've had the opportunity to build systems for government agencies (MBPJ, PDRM, DOF) and develop property management platforms used by real users. Whether it's creating a chatbot to help citizens or building a recruitment system for security personnel, I enjoy solving real problems with clean, maintainable code.\n\nWhen I'm not coding, I'm probably learning something new or looking for the next challenge to grow as a developer."
     },
     experiences: [
         {
-            position: "Learning Something New",
-            company: "Self-Development",
-            period: "2025 - Present",
-            location: "Bangladesh",
-            description: "Continuously exploring emerging technologies, researching advanced AI systems, and pushing the boundaries of what's possible in tech.",
+            position: "Software Developer",
+            company: "TrackerHero - Integrated Operations",
+            period: "Mar 2024 - Present",
+            location: "Cyberjaya, Selangor",
+            description: "Designed, developed, and maintained web applications using Laravel, Nuxt, Next.js, MySQL, and RESTful APIs, enhancing functionality and user experience.",
             responsibilities: [
-                "Researching cutting-edge AI and ML technologies",
-                "Experimenting with new frameworks and tools",
-                "Contributing to open-source projects",
-                "Building innovative personal projects"
+                "Developed PropKira - cloud-based property and accounting management platform",
+                "Built PropKita with bi-directional data sync and SSO integration",
+                "Developed ForceHero - security guard recruitment system for PDRM",
+                "Created chatbot with analytics dashboard for MBPJ website",
+                "Applied DevOps practices including CI/CD pipelines and Docker containerization"
             ],
-            technologies: ["Research", "Innovation", "Open Source", "New Tech"]
+            technologies: ["Laravel", "Nuxt", "Next.js", "MySQL", "React", "Vue.js", "Docker", "REST APIs"]
         },
         {
-            position: "AI Engineer",
-            company: "Freelance & Projects",
-            period: "2025",
-            location: "Bangladesh",
-            description: "Developing intelligent AI systems, chatbots, and machine learning solutions. Building next-gen conversational AI agents and JARVIS-like personal assistants.",
+            position: "Web App Developer",
+            company: "Digital Dagang Sdn. Bhd.",
+            period: "Mar 2023 - Mar 2024",
+            location: "Malaysia",
+            description: "Completed development of a Customer Relationship Management (CRM) system from scratch within deadlines through self-learning.",
             responsibilities: [
-                "Building AI-powered chatbots and conversational agents",
-                "Developing machine learning models with TensorFlow and PyTorch",
-                "Working with LLMs and transformer architectures",
-                "Creating autonomous AI systems and automation tools"
+                "Built CRM system using Laravel for backend and Angular for frontend",
+                "Created robust APIs and managed database interactions",
+                "Developed dynamic, user-friendly interfaces for managing customer data",
+                "Performed networking tasks and managed support tickets"
             ],
-            technologies: ["Python", "TensorFlow", "PyTorch", "LLMs", "NLP", "AI Agents"]
+            technologies: ["Laravel", "Angular", "PHP", "TypeScript", "MySQL", "JavaScript"]
         },
         {
-            position: "Full-Stack Developer",
-            company: "Freelance & Projects",
-            period: "2024",
-            location: "Bangladesh",
-            description: "Built complete web applications from frontend to backend. Developed responsive UIs, RESTful APIs, and database solutions for various clients and projects.",
+            position: "Student",
+            company: "Universiti Malaysia Terengganu",
+            period: "Sep 2020 - Mar 2024",
+            location: "Terengganu, Malaysia",
+            description: "Pursued Bachelor of Computer Science (Mobile Computing) With Honours. Active member of ComTech (Computer Club) and participated in various tech competitions.",
             responsibilities: [
-                "Developing full-stack web applications using React and Node.js",
-                "Building RESTful APIs and integrating databases",
-                "Creating responsive and interactive user interfaces",
-                "Deploying and maintaining web applications"
+                "Achieved GPA of 3.27",
+                "Top 20 in Innovation and Technology Challenge Competition 2021",
+                "Member of ComTech (Computer Club)",
+                "Participated in sports and Fun Run events"
             ],
-            technologies: ["React", "Node.js", "MongoDB", "Express", "Next.js", "TypeScript"]
-        },
-        {
-            position: "Python Developer",
-            company: "Self-Taught & Projects",
-            period: "2023",
-            location: "Bangladesh",
-            description: "Dove deep into Python programming, building automation scripts, bots, and mastering the fundamentals of software development and problem-solving.",
-            responsibilities: [
-                "Learning Python programming and core concepts",
-                "Building automation scripts and Discord bots",
-                "Exploring data structures and algorithms",
-                "Participating in competitive programming"
-            ],
-            technologies: ["Python", "Automation", "Scripting", "Discord.py", "Problem Solving"]
-        },
-        {
-            position: "Graphic Designer",
-            company: "Freelance",
-            period: "2022",
-            location: "Bangladesh",
-            description: "Started my creative journey as a graphic designer, creating logos, banners, and visual content. This sparked my passion for technology and digital creation.",
-            responsibilities: [
-                "Designing logos and brand identity materials",
-                "Creating social media graphics and banners",
-                "Working with clients on creative projects",
-                "Learning design principles and visual aesthetics"
-            ],
-            technologies: ["Photoshop", "Illustrator", "Canva", "Figma", "Visual Design"]
-        },
-        {
-            position: "Microsoft Office",
-            company: "Begin Learning",
-            period: "2021",
-            location: "Bangladesh",
-            description: "Started my journey into the digital world by learning Microsoft Office tools. This foundational step introduced me to computers and sparked my curiosity for technology.",
-            responsibilities: [
-                "Learning Microsoft Word, Excel, and PowerPoint",
-                "Creating documents and presentations",
-                "Understanding basic computer operations",
-                "Building foundational digital skills"
-            ],
-            technologies: ["MS Word", "MS Excel", "MS PowerPoint", "Computer Basics"]
+            technologies: ["Java", "Kotlin", "Mobile Development", "SQL", "Web Development"]
         }
     ],
     projects: [
         {
             id: 1,
-            title: "Drishti",
-            category: "AI / LLM",
-            technologies: "Python, PyTorch, Transformers, FastAPI, React, MongoDB",
-            image: "/images/drishti.png",
-            description: "Bangladesh's first intelligent advanced AI chatbot powered by a custom Large Language Model. Features natural language understanding, contextual conversations, and multilingual support including Bengali."
+            title: "PropKira",
+            category: "Property Management",
+            technologies: "Laravel, React, MySQL, REST APIs",
+            image: "https://placehold.co/600x400/1a1a2e/c2a4ff?text=PropKira&font=montserrat",
+            link: "https://app.propkira.com",
+            description: "A cloud-based property and accounting management platform. Features comprehensive tracking of income and expenses, automated billing and payment reconciliation, real-time financial reports with visual charts, and seamless resident payment processing."
         },
         {
             id: 2,
-            title: "VoteChain",
-            category: "Blockchain",
-            technologies: "Solidity, Web3.js, React, Ethereum, IPFS, MetaMask, Node.js",
-            image: "/images/votechain.png",
-            description: "A decentralized election system built on blockchain technology ensuring transparent, tamper-proof, and verifiable voting. Features smart contracts for vote integrity and real-time result tracking."
+            title: "PropKita",
+            category: "Property Management",
+            technologies: "Laravel, React, MySQL, SSO Integration",
+            image: "https://placehold.co/600x400/1a1a2e/c2a4ff?text=PropKita&font=montserrat",
+            link: "https://app.propkita.com",
+            description: "Property management system with bi-directional data synchronization with PropKira accounting platform. Features SSO login integration for unified and secure user access across both platforms."
         },
         {
             id: 3,
-            title: "EIE - Earthquake Impact Estimator",
-            category: "IoT / Hardware",
-            technologies: "Arduino, C++, IoT Sensors, Python, ML, React",
-            image: "/images/eie.png",
-            description: "A practical circuit-based IoT system utilizing Arduino to predict earthquakes before they strike. Integrates hardware sensors for real-time seismic detection and impact estimation."
+            title: "ForceHero",
+            category: "Government System",
+            technologies: "Next.js, Laravel, MySQL",
+            image: "https://placehold.co/600x400/1a1a2e/c2a4ff?text=ForceHero&font=montserrat",
+            link: "https://app.forcehero.com",
+            description: "A security guard recruitment and management system for PDRM. Features multi-level approval and permission workflows, security guard asset management, recruitment workflows, and ongoing guard administration."
         },
         {
             id: 4,
-            title: "GameKroy",
-            category: "Full Stack",
-            technologies: "React, Node.js, MongoDB, Express, Stripe, TailwindCSS",
-            image: "/images/gamekroy.png",
-            description: "A full-featured e-commerce platform for gaming products. Includes user authentication, product catalog, shopping cart, secure payments, order tracking, and admin dashboard."
+            title: "MBPJ Chatbot",
+            category: "AI / Chatbot",
+            technologies: "Laravel, MySQL, SSO Integration",
+            image: "https://placehold.co/600x400/1a1a2e/c2a4ff?text=MBPJ+Chatbot&font=montserrat",
+            link: "http://chatbot.mbpj.gov.my",
+            description: "Chatbot and analytics dashboard for MBPJ website. Integrated real-time analytics, support features, and automated reporting. Handles public inquiries efficiently with SSO integration."
         },
         {
             id: 5,
-            title: "RedxChess",
-            category: "AI / Game Engine",
-            technologies: "Python, C++, Neural Networks, Bitboards, UCI Protocol",
-            image: "/images/redxchess.png",
-            description: "A high-performance chess engine rated 3640 ELO. Features advanced search algorithms, neural network evaluation, and optimized bitboard representation for lightning-fast move generation."
+            title: "E-Rupabumi",
+            category: "Government System",
+            technologies: "Laravel, MySQL, JavaScript, JQuery, IIS",
+            image: "https://placehold.co/600x400/1a1a2e/c2a4ff?text=E-Rupabumi&font=montserrat",
+            link: "https://erupabumi.mbpj.gov.my",
+            description: "Web system and RESTful API to support mobile applications for MBPJ's management of trees, park equipment, and city assets throughout Petaling Jaya."
         },
         {
             id: 6,
-            title: "Floodhub",
-            category: "AI / ML",
-            technologies: "Python, TensorFlow, Pandas, React, FastAPI, GIS",
-            image: "/images/floodhub.png",
-            description: "A flood prediction model specifically designed for Bangladesh's river systems. Analyzes weather patterns, water levels, and historical data to provide accurate flood forecasts and alerts."
-        },
-        {
-            id: 7,
-            title: "Phoenix",
-            category: "AI Assistant",
-            technologies: "Python, Speech Recognition, PyAutoGUI, OpenAI API, Tkinter",
-            image: "/images/phoenix.png",
-            description: "A JARVIS-inspired personal AI desktop assistant. Controls system functions, manages tasks, answers queries, automates workflows, and provides voice-activated computing experience."
-        },
-        {
-            id: 8,
-            title: "HekTools",
-            category: "Security / Android",
-            technologies: "Kotlin, Android SDK, Firebase, Python, Encryption",
-            image: "/images/hektools.png",
-            description: "An advanced Android monitoring and security research tool. Features remote device management, activity logging, and encrypted data transmission for security testing purposes."
+            title: "CRM System",
+            category: "Enterprise",
+            technologies: "Laravel, Angular, MySQL, REST APIs",
+            image: "https://placehold.co/600x400/1a1a2e/c2a4ff?text=CRM+System&font=montserrat",
+            description: "A full-stack CRM system to track customer contacts, sales leads, and communication. Built from scratch using Angular for frontend and Laravel for backend."
         }
     ],
     contact: {
-        email: "redoyanul1234@gmail.com",
-        github: "https://github.com/red1-for-hek",
-        linkedin: "https://linkedin.com/in/red1-for-hek",
-        twitter: "https://x.com/red_1_ul",
-        facebook: "https://www.facebook.com/redoyanulhaque.hacker.official",
-        instagram: "https://www.instagram.com/red_1_ul"
+        email: "muhdfarid109.mf@gmail.com",
+        github: "https://github.com/Efice10",
+        linkedin: "https://linkedin.com/in/muhd-farid-39b293271",
+        twitter: "https://x.com/mhdfrdqbl",
+        facebook: "",
+        instagram: "https://instagram.com/_fxrid"
     },
     skills: {
-        develop: {
-            title: "AI DEVELOPER",
-            description: "Building intelligent systems & AI solutions",
-            details: "Developing AI agents, chatbots, and machine learning models using Python, TensorFlow, and PyTorch. Specializing in LLMs, NLP, deep learning, and autonomous systems.",
-            tools: ["Python", "TensorFlow", "PyTorch", "OpenCV", "Scikit-learn", "LLMs", "NLP", "Deep Learning", "Chatbots", "AI Agents"]
+        backend: {
+            title: "BACKEND DEVELOPER",
+            description: "Building robust backend systems & APIs",
+            details: "Developing scalable web applications using Laravel and Next.js. Experienced in building RESTful APIs, database design with MySQL, and implementing business logic for enterprise solutions.",
+            tools: ["Laravel", "PHP", "Next.js", "Nuxt", "MySQL", "REST APIs", "Node.js", "Docker", "Git", "Linux"]
         },
-        design: {
-            title: "FULL-STACK",
-            description: "Modern web development & scalable applications",
-            details: "Building responsive and performant web applications using React, Next.js, Node.js, and databases. Creating seamless user experiences with modern UI/UX principles.",
-            tools: ["React", "Next.js", "Node.js", "TypeScript", "MongoDB", "PostgreSQL", "TailwindCSS", "REST APIs", "Docker", "Git"]
+        frontend: {
+            title: "FRONTEND DEVELOPER",
+            description: "Modern web interfaces & user experiences",
+            details: "Creating responsive and performant user interfaces using React, Vue.js, Angular, and TypeScript. Building seamless user experiences with modern UI/UX principles and component-based architecture.",
+            tools: ["React", "Vue.js", "Angular", "TypeScript", "JavaScript", "HTML", "CSS", "TailwindCSS", "Figma", "Postman"]
+        },
+        devops: {
+            title: "DEVOPS & TOOLS",
+            description: "Deployment & infrastructure management",
+            details: "Managing deployments, CI/CD pipelines, and server infrastructure. Experienced with Docker containerization and cloud services for reliable application delivery.",
+            tools: ["Docker", "AWS", "CI/CD", "Nginx", "IIS", "Linux", "GitHub", "Server Management"]
+        },
+        mobile: {
+            title: "MOBILE & OTHER",
+            description: "Mobile development & integrations",
+            details: "Android development with Kotlin and cross-platform solutions with Flutter. Experienced in SSO integration, Firebase, and building mobile-friendly applications.",
+            tools: ["Kotlin", "Flutter", "Android", "Firebase", "SSO", "API Integration"]
         }
     }
 };
-
-

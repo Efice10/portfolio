@@ -126,6 +126,25 @@
   line-height: 1.5;
 }
 
+.myworks-card-link {
+  display: inline-block;
+  margin-top: 15px;
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #000;
+  background: var(--accentColor);
+  border-radius: 20px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.myworks-card-link:hover {
+  transform: scale(1.05);
+  box-shadow: 0 5px 20px rgba(194, 164, 255, 0.4);
+  color: #000;
+}
+
 /* Responsive */
 @media only screen and (max-width: 768px) {
   .myworks-page {
